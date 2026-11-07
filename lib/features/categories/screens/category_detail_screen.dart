@@ -42,7 +42,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
-              color: widget.category.color.withOpacity(0.12),
+              color: widget.category.color.withValues(alpha: 0.12),
               child: Row(
                 children: [
                   CircleAvatar(

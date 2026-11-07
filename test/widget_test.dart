@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:all_tools_app/main.dart';
 import 'package:all_tools_app/core/providers/storage_provider.dart';
+import 'package:all_tools_app/features/main_navigation/screens/splash_screen.dart';
 
 void main() {
   testWidgets('App loads splash screen successfully', (WidgetTester tester) async {
@@ -18,7 +19,7 @@ void main() {
       ),
     );
 
-    expect(find.text('All Tools'), findsOneWidget);
-    await tester.pumpAndSettle(const Duration(seconds: 2));
+    expect(find.byType(SplashScreen), findsOneWidget);
+    await tester.pumpAndSettle();
   });
 }

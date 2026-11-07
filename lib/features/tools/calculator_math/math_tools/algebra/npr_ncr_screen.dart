@@ -1,0 +1,111 @@
+import 'package:flutter/material.dart';
+import '../../../../common/widgets/responsive_container.dart';
+
+class NprNcrScreen extends StatefulWidget {
+  const NprNcrScreen({super.key});
+
+  @override
+  State<NprNcrScreen> createState() => _NprNcrScreenState();
+}
+
+class _NprNcrScreenState extends State<NprNcrScreen> {
+  final TextEditingController _nCtrl = TextEditingController(text: '7');
+  final TextEditingController _rCtrl = TextEditingController(text: '3');
+
+  int _nPr = 210;
+  int _nCr = 35;
+
+  int _factorial(int n) {
+    if (n <= 1) return 1;
+    int fact = 1;
+    for (int i = 2; i <= n; i++) {
+      fact *= i;
+    }
+    return fact;
+  }
+
+  void _calculate() {
+    int n = int.tryParse(_nCtrl.text) ?? 0;
+    int r = int.tryParse(_rCtrl.text) ?? 0;
+
+    if (n < 0 || r < 0 || r > n) {
+      setState(() {
+        _nPr = 0;
+        _nCr = 0;
+      });
+      return;
+    }
+
+    int nFact = _factorial(n);
+    int rFact = _factorial(r);
+    int nMinusRFact = _factorial(n - r);
+
+    setState(() {
+      _nPr = nFact ~/ nMinusRFact;
+      _nCr = nFact ~/ (rFact * nMinusRFact);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Permutation & Combination (nPr / nCr)')),
+      body: ResponsiveContainer(
+        maxWidth: 700,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            Card(
+              color: Colors.deepPurple.shade900,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      children: [
+                        const Text('Permutation (nPr)', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                        const SizedBox(height: 8),
+                        Text('$_nPr', style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        const Text('Combination (nCr)', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                        const SizedBox(height: 8),
+                        Text('$_nCr', style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.lightGreenAccent)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _nCtrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Total Items (n)', border: OutlineInputBorder()),
+                      onChanged: (_) => _calculate(),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _rCtrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Selected Items (r)', border: OutlineInputBorder()),
+                      onChanged: (_) => _calculate(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

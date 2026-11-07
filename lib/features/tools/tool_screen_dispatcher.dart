@@ -5,7 +5,56 @@ import '../../core/localization/localization_provider.dart';
 import '../../core/providers/history_provider.dart';
 
 // Import all specific tool screen files
-import 'calculator_math/math_tools/math_utils/math_utils.dart';
+import 'calculator_math/calculator_tools_screen.dart';
+
+// Math & Finance subfolder imports
+import 'calculator_math/math_tools/finance/compound_interest_screen.dart';
+import 'calculator_math/math_tools/finance/simple_interest_screen.dart';
+import 'calculator_math/math_tools/finance/gst_vat_screen.dart';
+import 'calculator_math/math_tools/finance/sip_calculator_screen.dart';
+import 'calculator_math/math_tools/finance/loan_eligibility_screen.dart';
+import 'calculator_math/math_tools/finance/inflation_salary_screen.dart';
+import 'calculator_math/math_tools/finance/tip_split_bill_screen.dart';
+
+import 'calculator_math/math_tools/algebra/matrix_calculator_screen.dart';
+import 'calculator_math/math_tools/algebra/gcd_lcm_screen.dart';
+import 'calculator_math/math_tools/algebra/npr_ncr_screen.dart';
+import 'calculator_math/math_tools/algebra/logarithm_screen.dart';
+import 'calculator_math/math_tools/algebra/quadratic_solver_screen.dart';
+import 'calculator_math/math_tools/algebra/statistics_calculator_screen.dart';
+import 'calculator_math/math_tools/algebra/ap_gp_series_screen.dart';
+
+import 'calculator_math/math_tools/geometry/shape_2d_area_screen.dart';
+import 'calculator_math/math_tools/geometry/shape_3d_volume_screen.dart';
+import 'calculator_math/math_tools/geometry/pythagoras_solver_screen.dart';
+import 'calculator_math/math_tools/geometry/trigonometry_solver_screen.dart';
+
+import 'calculator_math/math_tools/health/ideal_weight_screen.dart';
+import 'calculator_math/math_tools/health/calorie_macro_screen.dart';
+import 'calculator_math/math_tools/health/body_fat_screen.dart';
+import 'calculator_math/math_tools/health/water_intake_screen.dart';
+
+import 'calculator_math/math_tools/time_utility/time_math_screen.dart';
+import 'calculator_math/math_tools/time_utility/timezone_converter_screen.dart';
+import 'calculator_math/math_tools/time_utility/fuel_mileage_screen.dart';
+import 'calculator_math/math_tools/time_utility/tally_counter_screen.dart';
+
+import 'calculator_math/math_tools/percentage_calculator_screen.dart';
+import 'calculator_math/math_tools/discount_calculator_screen.dart';
+import 'calculator_math/math_tools/profit_loss_calculator_screen.dart';
+import 'calculator_math/math_tools/emi_calculator_screen.dart';
+import 'calculator_math/math_tools/bmi_calculator_screen.dart';
+import 'calculator_math/math_tools/bmr_calculator_screen.dart';
+import 'calculator_math/math_tools/gpa_calculator_screen.dart';
+import 'calculator_math/math_tools/fraction_calculator_screen.dart';
+import 'calculator_math/math_tools/ratio_calculator_screen.dart';
+import 'calculator_math/math_tools/average_calculator_screen.dart';
+import 'calculator_math/math_tools/number_system_converter_screen.dart';
+import 'calculator_math/math_tools/equation_solver_screen.dart';
+import 'calculator_math/math_tools/random_generator_screen.dart';
+import 'calculator_math/math_tools/prime_checker_screen.dart';
+import 'calculator_math/math_tools/factorial_calculator_screen.dart';
+
 import 'pdf_document/pdf_tools_screen.dart';
 import 'image_photo/image_tools_screen.dart';
 import 'qr_barcode/qr_tools_screen.dart';
@@ -31,74 +80,175 @@ class ToolScreenDispatcher {
     switch (toolId) {
       // 1. Calculator & Math
       case 'basic_calc':
+        screen = const BasicCalculatorScreen();
+        break;
+
       case 'scientific_calc':
-        screen = tools[0].page(tools[0]);
-        break;
-
-      case 'age_calc':
-        screen = tools[1].page(tools[1]);
-        break;
-
-      case 'date_diff_calc':
-        screen = tools[2].page(tools[2]);
+        screen = const ScientificCalculatorScreen();
         break;
 
       case 'percentage_calc':
+        screen = const PercentageCalculatorScreen();
+        break;
+
       case 'discount_calc':
-        screen = tools[3].page(tools[3]);
+        screen = const DiscountCalculatorScreen();
         break;
 
       case 'profit_loss_calc':
-        screen = tools[4].page(tools[4]);
+        screen = const ProfitLossCalculatorScreen();
         break;
 
       case 'emi_calc':
-        screen = tools[5].page(tools[5]);
+        screen = const EmiCalculatorScreen();
         break;
 
       case 'bmi_calc':
+        screen = const BmiCalculatorScreen();
+        break;
+
       case 'bmr_calc':
-        screen = tools[6].page(tools[6]);
+        screen = const BmrCalculatorScreen();
         break;
 
       case 'gpa_calc':
-        screen = tools[7].page(tools[7]);
+        screen = const GpaCalculatorScreen();
         break;
 
       case 'fraction_calc':
-        screen = tools[8].page(tools[8]);
+        screen = const FractionCalculatorScreen();
         break;
 
       case 'ratio_calc':
-        screen = tools[9].page(tools[9]);
+        screen = const RatioCalculatorScreen();
         break;
 
       case 'average_calc':
-        screen = tools[10].page(tools[10]);
-        break;
-
-      case 'unit_converter_math':
-        screen = tools[11].page(tools[11]);
+        screen = const AverageCalculatorScreen();
         break;
 
       case 'number_system_converter':
-        screen = tools[12].page(tools[12]);
+        screen = const NumberSystemConverterScreen();
         break;
 
       case 'equation_solver':
-        screen = tools[13].page(tools[13]);
+        screen = const EquationSolverScreen();
         break;
 
       case 'random_generator':
-        screen = tools[14].page(tools[14]);
+        screen = const RandomGeneratorScreen();
         break;
 
       case 'prime_checker':
-        screen = tools[15].page(tools[15]);
+        screen = const PrimeCheckerScreen();
         break;
 
       case 'factorial_calc':
-        screen = tools[16].page(tools[16]);
+        screen = const FactorialCalculatorScreen();
+        break;
+
+      case 'compound_interest_calc':
+        screen = const CompoundInterestScreen();
+        break;
+
+      case 'simple_interest_calc':
+        screen = const SimpleInterestScreen();
+        break;
+
+      case 'gst_vat_tax_calc':
+        screen = const GstVatScreen();
+        break;
+
+      case 'sip_mutual_fund_calc':
+        screen = const SipCalculatorScreen();
+        break;
+
+      case 'loan_eligibility_calc':
+        screen = const LoanEligibilityScreen();
+        break;
+
+      case 'inflation_salary_calc':
+        screen = const InflationSalaryScreen();
+        break;
+
+      case 'tip_split_bill_calc':
+        screen = const TipSplitBillScreen();
+        break;
+
+      case 'matrix_determinant_calc':
+        screen = const MatrixCalculatorScreen();
+        break;
+
+      case 'gcd_lcm_calc':
+        screen = const GcdLcmScreen();
+        break;
+
+      case 'npr_ncr_calc':
+        screen = const NprNcrScreen();
+        break;
+
+      case 'logarithm_calc':
+        screen = const LogarithmScreen();
+        break;
+
+      case 'quadratic_equation_solver':
+        screen = const QuadraticSolverScreen();
+        break;
+
+      case 'statistics_calc':
+        screen = const StatisticsCalculatorScreen();
+        break;
+
+      case 'ap_gp_series_calc':
+        screen = const ApGpSeriesScreen();
+        break;
+
+      case 'area_2d_shape_calc':
+        screen = const Shape2dAreaScreen();
+        break;
+
+      case 'volume_3d_shape_calc':
+        screen = const Shape3dVolumeScreen();
+        break;
+
+      case 'pythagoras_triangle_calc':
+        screen = const PythagorasSolverScreen();
+        break;
+
+      case 'trigonometry_solver':
+        screen = const TrigonometrySolverScreen();
+        break;
+
+      case 'ideal_body_weight_calc':
+        screen = const IdealWeightScreen();
+        break;
+
+      case 'calorie_macro_calc':
+        screen = const CalorieMacroScreen();
+        break;
+
+      case 'body_fat_percentage_calc':
+        screen = const BodyFatScreen();
+        break;
+
+      case 'water_intake_calc':
+        screen = const WaterIntakeScreen();
+        break;
+
+      case 'time_math_calc':
+        screen = const TimeMathScreen();
+        break;
+
+      case 'timezone_converter_calc':
+        screen = const TimezoneConverterScreen();
+        break;
+
+      case 'fuel_cost_mileage_calc':
+        screen = const FuelMileageScreen();
+        break;
+
+      case 'tally_counter_tool':
+        screen = const TallyCounterScreen();
         break;
 
       // 2. PDF & Document
@@ -108,25 +258,28 @@ class ToolScreenDispatcher {
         break;
 
       case 'pdf_merger':
-        screen = const PdfMergeSplitScreen(isMergeMode: true);
+        screen = const PdfMergerScreen();
         break;
 
       case 'pdf_splitter':
+        screen = const PdfSplitterScreen();
+        break;
+
       case 'pdf_page_rotator':
       case 'pdf_page_reorder':
-        screen = const PdfMergeSplitScreen(isMergeMode: false);
+        screen = const PdfPageRotatorScreen();
         break;
 
       case 'pdf_compressor':
-        screen = const PdfCompressWatermarkScreen(mode: 'compress');
+        screen = const PdfCompressorScreen();
         break;
 
       case 'pdf_lock_unlock':
-        screen = const PdfCompressWatermarkScreen(mode: 'lock');
+        screen = const PdfLockUnlockScreen();
         break;
 
       case 'watermark_pdf':
-        screen = const PdfCompressWatermarkScreen(mode: 'watermark');
+        screen = const WatermarkPdfScreen();
         break;
 
       case 'signature_maker':
@@ -134,6 +287,9 @@ class ToolScreenDispatcher {
         break;
 
       case 'ocr_text':
+        screen = const OcrTextScreen();
+        break;
+
       case 'pdf_text_extractor':
         screen = const TextExtractorScreen();
         break;
@@ -145,13 +301,22 @@ class ToolScreenDispatcher {
         break;
 
       case 'pdf_metadata_viewer':
+        screen = const PdfMetadataViewerScreen();
+        break;
+
       case 'pdf_page_counter':
-      case 'pdf_reader':
       case 'pdf_to_image':
         screen = const PdfMetadataScreen();
         break;
 
+      case 'pdf_reader':
+        screen = const PdfReaderScreen();
+        break;
+
       case 'word_to_pdf':
+        screen = const WordToPdfScreen();
+        break;
+
       case 'doc_converter':
         screen = const WordDocConverterScreen();
         break;
@@ -162,15 +327,24 @@ class ToolScreenDispatcher {
         break;
 
       case 'image_compressor':
+        screen = const ImageCompressorScreen();
+        break;
+
       case 'image_resizer':
+        screen = const ImageResizerScreen();
+        break;
+
       case 'image_cropper':
       case 'image_rotator':
+      case 'bg_remover':
+        screen = const ImageResizerCompressorScreen();
+        break;
+
       case 'format_converter':
       case 'jpg_to_png':
       case 'png_to_jpg':
       case 'webp_converter':
-      case 'bg_remover':
-        screen = const ImageResizerCompressorScreen();
+        screen = const FormatConverterScreen();
         break;
 
       case 'passport_photo_maker':
@@ -179,6 +353,9 @@ class ToolScreenDispatcher {
         break;
 
       case 'photo_filters':
+        screen = const PhotoFiltersScreen();
+        break;
+
       case 'blur_image':
       case 'pixelate_image':
       case 'image_watermark':

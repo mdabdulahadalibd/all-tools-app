@@ -60,9 +60,9 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: cat.color.withOpacity(0.12),
+                          color: cat.color.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: cat.color.withOpacity(0.3)),
+                          border: Border.all(color: cat.color.withValues(alpha: 0.3)),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +114,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                         subtitle: Text(cat.getDescription(lang), maxLines: 1, overflow: TextOverflow.ellipsis),
                         trailing: Chip(
                           label: Text('$toolCount Tools', style: const TextStyle(fontSize: 12)),
-                          backgroundColor: cat.color.withOpacity(0.15),
+                          backgroundColor: cat.color.withValues(alpha: 0.15),
                         ),
                         onTap: () {
                           Navigator.push(

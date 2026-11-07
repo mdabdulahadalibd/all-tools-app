@@ -9,7 +9,6 @@ import 'features/main_navigation/screens/splash_screen.dart';
 
 Future<void> main() async {
 
-
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
 
@@ -40,3 +39,5 @@ class AllToolsApp extends ConsumerWidget {
     );
   }
 }
+
+// OneTools Studio name app a diye daw and bangla and english jno kaj kore and appconfig a kore daw jno ak jaiga theke chnage korle sob jaigai chnage hoi

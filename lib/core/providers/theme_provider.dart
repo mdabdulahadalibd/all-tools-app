@@ -33,6 +33,14 @@ class ThemeNotifier extends StateNotifier<ThemeMode> {
     if (mode == ThemeMode.dark) modeStr = 'dark';
     storage.setThemeMode(modeStr);
   }
+
+  void toggleTheme() {
+    if (state == ThemeMode.dark) {
+      setThemeMode(ThemeMode.light);
+    } else {
+      setThemeMode(ThemeMode.dark);
+    }
+  }
 }
 
 final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>((ref) {

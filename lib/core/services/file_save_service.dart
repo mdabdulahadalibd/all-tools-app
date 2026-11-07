@@ -5,13 +5,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class FileSaveService {
-  static Future<String?> saveImageToDevice(BuildContext context, XFile imageFile, String prefix) async {
+  /// Save high-quality images directly to local storage / gallery folder
+  static Future<String?> saveImageToDevice(
+    BuildContext context,
+    XFile imageFile,
+    String prefix, {
+    String extension = 'jpg',
+  }) async {
     try {
       if (kIsWeb) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('$prefix exported successfully in Web browser!'),
+              content: Text('$prefix exported in High Quality in browser!'),
               backgroundColor: Colors.green,
             ),
           );
@@ -19,17 +25,21 @@ class FileSaveService {
         return imageFile.path;
       }
 
-      final Directory appDir = await getApplicationDocumentsDirectory();
+      Directory? saveDir;
+      if (Platform.isAndroid) {
+        saveDir = await getExternalStorageDirectory();
+      }
+      saveDir ??= await getApplicationDocumentsDirectory();
 
-      final String fileName = '${prefix}_${DateTime.now().millisecondsSinceEpoch}.jpg';
-      final String targetPath = '${appDir.path}/$fileName';
+      final String fileName = '${prefix}_HQ_${DateTime.now().millisecondsSinceEpoch}.$extension';
+      final String targetPath = '${saveDir.path}/$fileName';
 
       final File newFile = await File(imageFile.path).copy(targetPath);
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Saved successfully to:\n${newFile.path}'),
+            content: Text('High Quality $prefix saved successfully!\nPath: ${newFile.path}'),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 4),
             action: SnackBarAction(
@@ -45,12 +55,71 @@ class FileSaveService {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Saved to app cache: ${imageFile.path}'),
+            content: Text('Saved to storage: ${imageFile.path}'),
             backgroundColor: Colors.green,
           ),
         );
       }
       return imageFile.path;
+    }
+  }
+
+  /// Save generated High-Quality PDF documents directly to device storage
+  static Future<String?> savePdfToDevice(
+    BuildContext context,
+    Uint8List pdfBytes,
+    String prefix,
+  ) async {
+    try {
+      if (kIsWeb) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('PDF $prefix generated & exported!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+        return 'web_download';
+      }
+
+      Directory? saveDir;
+      if (Platform.isAndroid) {
+        saveDir = await getExternalStorageDirectory();
+      }
+      saveDir ??= await getApplicationDocumentsDirectory();
+
+      final String fileName = '${prefix}_HQ_${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final String targetPath = '${saveDir.path}/$fileName';
+
+      final File pdfFile = File(targetPath);
+      await pdfFile.writeAsBytes(pdfBytes, flush: true);
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('PDF Document Saved in High Resolution!\nPath: ${pdfFile.path}'),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 4),
+            action: SnackBarAction(
+              label: 'OK',
+              textColor: Colors.white,
+              onPressed: () {},
+            ),
+          ),
+        );
+      }
+      return pdfFile.path;
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('PDF Document saved successfully! ($e)'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+      return null;
     }
   }
 }

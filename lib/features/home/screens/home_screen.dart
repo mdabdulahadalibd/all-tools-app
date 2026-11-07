@@ -5,9 +5,11 @@ import '../../../core/localization/localization_provider.dart';
 import '../../../core/models/tool_model.dart';
 import '../../../core/providers/favorites_provider.dart';
 import '../../../core/providers/history_provider.dart';
+import '../../../core/providers/theme_provider.dart';
 import '../../categories/screens/category_detail_screen.dart';
 import '../../common/widgets/responsive_container.dart';
 import '../../common/widgets/tool_card.dart';
+import '../../settings/screens/settings_screen.dart';
 import '../../tools/tool_screen_dispatcher.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -39,10 +41,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final popularTools = ToolCategories.tools.where((t) => t.isPopular).toList();
     final favIds = ref.watch(favoritesProvider);
     final historyIds = ref.watch(historyProvider);
+    final themeMode = ref.watch(themeProvider);
 
     final searchResults = _getFilteredTools(_searchQuery, lang);
     final width = MediaQuery.of(context).size.width;
     final gridCount = width > 900 ? 4 : (width > 600 ? 3 : 2);
+
+    final isDarkMode = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system && MediaQuery.of(context).platformBrightness == Brightness.dark);
 
     return Scaffold(
       appBar: AppBar(
@@ -60,6 +66,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Text(langNotifier.translate('app_title')),
           ],
         ),
+        actions: [
+          // Dark / Light Mode Toggle Button
+          IconButton(
+            icon: Icon(
+              isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: isDarkMode ? Colors.amber : Colors.indigo,
+            ),
+            tooltip: isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+            onPressed: () {
+              ref.read(themeProvider.notifier).toggleTheme();
+            },
+          ),
+          // Settings Action Button
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: langNotifier.translate('settings_title'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: ResponsiveContainer(
         maxWidth: 1000,
@@ -82,7 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       )
                     : null,
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.4),
+                fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                   borderSide: BorderSide.none,
@@ -139,9 +170,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         width: 105,
                         margin: const EdgeInsets.only(right: 12),
                         decoration: BoxDecoration(
-                          color: cat.color.withOpacity(0.12),
+                          color: cat.color.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: cat.color.withOpacity(0.3)),
+                          border: Border.all(color: cat.color.withValues(alpha: 0.3)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -247,16 +278,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: cat.color.withOpacity(0.1),
+                        color: cat.color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: cat.color.withOpacity(0.2)),
+                        border: Border.all(color: cat.color.withValues(alpha: 0.2)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CircleAvatar(
-                            backgroundColor: cat.color.withOpacity(0.2),
+                            backgroundColor: cat.color.withValues(alpha: 0.2),
                             radius: 20,
                             child: Icon(cat.icon, color: cat.color, size: 22),
                           ),
