@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 
-class TallyCounterScreen extends StatefulWidget {
+class TallyCounterScreen extends ConsumerStatefulWidget {
   const TallyCounterScreen({super.key});
 
   @override
-  State<TallyCounterScreen> createState() => _TallyCounterScreenState();
+  ConsumerState<TallyCounterScreen> createState() => _TallyCounterScreenState();
 }
 
-class _TallyCounterScreenState extends State<TallyCounterScreen> {
+class _TallyCounterScreenState extends ConsumerState<TallyCounterScreen> {
   int _counter = 0;
 
   void _increment() => setState(() => _counter++);
@@ -19,13 +22,18 @@ class _TallyCounterScreenState extends State<TallyCounterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('tally_counter_tool');
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Digital Tally Counter'),
+        title: Text(tool.getTitle(lang)),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: 'Reset Count',
+            tooltip: langNotifier.translate('reset'),
             onPressed: _reset,
           ),
         ],
@@ -60,7 +68,7 @@ class _TallyCounterScreenState extends State<TallyCounterScreen> {
                         style: const TextStyle(fontSize: 72, fontWeight: FontWeight.bold, color: Colors.blue),
                       ),
                       const SizedBox(height: 8),
-                      const Text('Tap to Count', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                      Text(langNotifier.translate('tap_to_count'), style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),

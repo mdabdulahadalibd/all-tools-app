@@ -1,15 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class BodyFatScreen extends StatefulWidget {
+class BodyFatScreen extends ConsumerStatefulWidget {
   const BodyFatScreen({super.key});
 
   @override
-  State<BodyFatScreen> createState() => _BodyFatScreenState();
+  ConsumerState<BodyFatScreen> createState() => _BodyFatScreenState();
 }
 
-class _BodyFatScreenState extends State<BodyFatScreen> {
+class _BodyFatScreenState extends ConsumerState<BodyFatScreen> {
   final TextEditingController _waistCmCtrl = TextEditingController(text: '82');
   final TextEditingController _neckCmCtrl = TextEditingController(text: '38');
   final TextEditingController _heightCmCtrl = TextEditingController(text: '172');
@@ -37,8 +40,12 @@ class _BodyFatScreenState extends State<BodyFatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('body_fat_percentage_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Body Fat Percentage Calculator')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -83,7 +90,7 @@ class _BodyFatScreenState extends State<BodyFatScreen> {
                     TextField(
                       controller: _heightCmCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Height (cm)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('height_cm'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

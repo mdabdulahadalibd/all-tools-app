@@ -1,15 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class TrigonometrySolverScreen extends StatefulWidget {
+class TrigonometrySolverScreen extends ConsumerStatefulWidget {
   const TrigonometrySolverScreen({super.key});
 
   @override
-  State<TrigonometrySolverScreen> createState() => _TrigonometrySolverScreenState();
+  ConsumerState<TrigonometrySolverScreen> createState() => _TrigonometrySolverScreenState();
 }
 
-class _TrigonometrySolverScreenState extends State<TrigonometrySolverScreen> {
+class _TrigonometrySolverScreenState extends ConsumerState<TrigonometrySolverScreen> {
   final TextEditingController _angleCtrl = TextEditingController(text: '45');
 
   double _sinVal = 0.7071;
@@ -35,8 +38,12 @@ class _TrigonometrySolverScreenState extends State<TrigonometrySolverScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('trigonometry_solver');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Trigonometry Values Solver')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -69,7 +76,7 @@ class _TrigonometrySolverScreenState extends State<TrigonometrySolverScreen> {
                 child: TextField(
                   controller: _angleCtrl,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'Angle in Degrees (°)', border: OutlineInputBorder()),
+                  decoration: InputDecoration(labelText: langNotifier.translate('angle_degrees'), border: const OutlineInputBorder()),
                   onChanged: (_) => _calculate(),
                 ),
               ),

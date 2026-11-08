@@ -23,7 +23,7 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       centerTitle: true,
       elevation: 0,
-      scrolledUnderElevation: 2,
+      scrolledUnderElevation: 0,
       backgroundColor: Color(0xFFF8FAFC),
       iconTheme: IconThemeData(color: primaryIndigo),
       actionsIconTheme: IconThemeData(color: primaryIndigo),
@@ -71,7 +71,7 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       centerTitle: true,
       elevation: 0,
-      scrolledUnderElevation: 2,
+      scrolledUnderElevation: 0,
       backgroundColor: Color(0xFF0F172A),
       iconTheme: IconThemeData(color: accentCyan),
       actionsIconTheme: IconThemeData(color: accentCyan),

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class FuelMileageScreen extends StatefulWidget {
+class FuelMileageScreen extends ConsumerStatefulWidget {
   const FuelMileageScreen({super.key});
 
   @override
-  State<FuelMileageScreen> createState() => _FuelMileageScreenState();
+  ConsumerState<FuelMileageScreen> createState() => _FuelMileageScreenState();
 }
 
-class _FuelMileageScreenState extends State<FuelMileageScreen> {
+class _FuelMileageScreenState extends ConsumerState<FuelMileageScreen> {
   final TextEditingController _distanceKmCtrl = TextEditingController(text: '350');
   final TextEditingController _mileageKmLCtrl = TextEditingController(text: '14');
   final TextEditingController _fuelPriceCtrl = TextEditingController(text: '130');
@@ -40,8 +43,12 @@ class _FuelMileageScreenState extends State<FuelMileageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('fuel_cost_mileage_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Fuel Cost & Mileage Calculator')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -77,21 +84,21 @@ class _FuelMileageScreenState extends State<FuelMileageScreen> {
                     TextField(
                       controller: _distanceKmCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Trip Distance (km)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('trip_distance_km'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _mileageKmLCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Vehicle Mileage Average (km/Liter)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('vehicle_mileage'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _fuelPriceCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Fuel Price per Liter (৳)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('fuel_price'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

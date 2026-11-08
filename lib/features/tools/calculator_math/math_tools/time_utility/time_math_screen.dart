@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class TimeMathScreen extends StatefulWidget {
+class TimeMathScreen extends ConsumerStatefulWidget {
   const TimeMathScreen({super.key});
 
   @override
-  State<TimeMathScreen> createState() => _TimeMathScreenState();
+  ConsumerState<TimeMathScreen> createState() => _TimeMathScreenState();
 }
 
-class _TimeMathScreenState extends State<TimeMathScreen> {
+class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
   final TextEditingController _h1Ctrl = TextEditingController(text: '2');
   final TextEditingController _m1Ctrl = TextEditingController(text: '45');
 
@@ -46,8 +49,12 @@ class _TimeMathScreenState extends State<TimeMathScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('time_math_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Time Calculator (Hours & Mins)')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -59,7 +66,7 @@ class _TimeMathScreenState extends State<TimeMathScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Total Time Duration', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('total_time_duration'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       _resultStr,

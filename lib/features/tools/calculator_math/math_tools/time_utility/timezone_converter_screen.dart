@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class TimezoneConverterScreen extends StatefulWidget {
+class TimezoneConverterScreen extends ConsumerStatefulWidget {
   const TimezoneConverterScreen({super.key});
 
   @override
-  State<TimezoneConverterScreen> createState() => _TimezoneConverterScreenState();
+  ConsumerState<TimezoneConverterScreen> createState() => _TimezoneConverterScreenState();
 }
 
-class _TimezoneConverterScreenState extends State<TimezoneConverterScreen> {
+class _TimezoneConverterScreenState extends ConsumerState<TimezoneConverterScreen> {
   String _fromZone = 'BST (Bangladesh UTC+6)';
   String _toZone = 'EST (New York UTC-5)';
 
@@ -24,6 +27,9 @@ class _TimezoneConverterScreenState extends State<TimezoneConverterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('timezone_converter_calc');
+
     int fromOffset = _zoneOffsetsHours[_fromZone] ?? 6;
     int toOffset = _zoneOffsetsHours[_toZone] ?? -5;
     int diffHours = toOffset - fromOffset;
@@ -32,7 +38,7 @@ class _TimezoneConverterScreenState extends State<TimezoneConverterScreen> {
     DateTime targetTime = nowBst.add(Duration(hours: diffHours));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Time Zone Difference Converter')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(

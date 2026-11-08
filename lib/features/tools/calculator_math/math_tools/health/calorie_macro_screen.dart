@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class CalorieMacroScreen extends StatefulWidget {
+class CalorieMacroScreen extends ConsumerStatefulWidget {
   const CalorieMacroScreen({super.key});
 
   @override
-  State<CalorieMacroScreen> createState() => _CalorieMacroScreenState();
+  ConsumerState<CalorieMacroScreen> createState() => _CalorieMacroScreenState();
 }
 
-class _CalorieMacroScreenState extends State<CalorieMacroScreen> {
+class _CalorieMacroScreenState extends ConsumerState<CalorieMacroScreen> {
   final TextEditingController _weightKgCtrl = TextEditingController(text: '70');
   final TextEditingController _heightCmCtrl = TextEditingController(text: '172');
   final TextEditingController _ageCtrl = TextEditingController(text: '25');
@@ -43,8 +46,12 @@ class _CalorieMacroScreenState extends State<CalorieMacroScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('calorie_macro_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Calorie & Macro Calculator')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -56,7 +63,7 @@ class _CalorieMacroScreenState extends State<CalorieMacroScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Daily Maintenance Calories (TDEE)', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('daily_maintenance_calories'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       '${_tdeeCalories.toStringAsFixed(0)} kcal',
@@ -84,21 +91,21 @@ class _CalorieMacroScreenState extends State<CalorieMacroScreen> {
                     TextField(
                       controller: _weightKgCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Weight (kg)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('weight_kg'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _heightCmCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Height (cm)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('height_cm'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _ageCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Age (Years)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('age_years'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

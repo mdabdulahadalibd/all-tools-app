@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class WaterIntakeScreen extends StatefulWidget {
+class WaterIntakeScreen extends ConsumerStatefulWidget {
   const WaterIntakeScreen({super.key});
 
   @override
-  State<WaterIntakeScreen> createState() => _WaterIntakeScreenState();
+  ConsumerState<WaterIntakeScreen> createState() => _WaterIntakeScreenState();
 }
 
-class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
+class _WaterIntakeScreenState extends ConsumerState<WaterIntakeScreen> {
   final TextEditingController _weightKgCtrl = TextEditingController(text: '68');
   double _waterLiters = 2.4;
 
@@ -20,7 +23,6 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
 
   void _calculate() {
     double w = double.tryParse(_weightKgCtrl.text) ?? 68;
-    // ~35ml per kg of body weight
     double liters = (w * 35) / 1000;
 
     setState(() => _waterLiters = liters);
@@ -28,8 +30,12 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('water_intake_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Daily Water Intake Calculator')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -43,7 +49,7 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
                   children: [
                     const Icon(Icons.water_drop, size: 48, color: Colors.white),
                     const SizedBox(height: 8),
-                    const Text('Recommended Daily Water', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('daily_water_intake'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       '${_waterLiters.toStringAsFixed(1)} Liters / Day',
@@ -65,7 +71,7 @@ class _WaterIntakeScreenState extends State<WaterIntakeScreen> {
                 child: TextField(
                   controller: _weightKgCtrl,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'Body Weight (kg)', border: OutlineInputBorder()),
+                  decoration: InputDecoration(labelText: langNotifier.translate('weight_kg'), border: const OutlineInputBorder()),
                   onChanged: (_) => _calculate(),
                 ),
               ),

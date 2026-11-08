@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class IdealWeightScreen extends StatefulWidget {
+class IdealWeightScreen extends ConsumerStatefulWidget {
   const IdealWeightScreen({super.key});
 
   @override
-  State<IdealWeightScreen> createState() => _IdealWeightScreenState();
+  ConsumerState<IdealWeightScreen> createState() => _IdealWeightScreenState();
 }
 
-class _IdealWeightScreenState extends State<IdealWeightScreen> {
+class _IdealWeightScreenState extends ConsumerState<IdealWeightScreen> {
   final TextEditingController _heightCmCtrl = TextEditingController(text: '172');
   bool _isMale = true;
 
@@ -34,8 +37,12 @@ class _IdealWeightScreenState extends State<IdealWeightScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('ideal_body_weight_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Ideal Body Weight (IBW)')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -47,7 +54,7 @@ class _IdealWeightScreenState extends State<IdealWeightScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Estimated Ideal Weight', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('ideal_weight_est'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       '${_idealWeightKg.toStringAsFixed(1)} kg',
@@ -67,7 +74,7 @@ class _IdealWeightScreenState extends State<IdealWeightScreen> {
                       children: [
                         Expanded(
                           child: ChoiceChip(
-                            label: const Text('Male'),
+                            label: Text(langNotifier.translate('male')),
                             selected: _isMale,
                             onSelected: (v) {
                               if (v) {
@@ -80,7 +87,7 @@ class _IdealWeightScreenState extends State<IdealWeightScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: ChoiceChip(
-                            label: const Text('Female'),
+                            label: Text(langNotifier.translate('female')),
                             selected: !_isMale,
                             onSelected: (v) {
                               if (v) {
@@ -96,7 +103,7 @@ class _IdealWeightScreenState extends State<IdealWeightScreen> {
                     TextField(
                       controller: _heightCmCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Height in cm', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('height_cm'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],
