@@ -35,9 +35,24 @@ class _CgpaGpaScreen extends State<CgpaGpaScreen> {
         Row(key: ObjectKey(subs[i]), children: [
           CircleAvatar(radius: 14, child: Text('${i + 1}')),
           const SizedBox(width: 10),
-          Expanded(flex: 2, child: tf('Credit', subs[i].credit, (x) => setState(() => subs[i].credit = x))),
+          Expanded(
+            flex: 2,
+            child: TextField(
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(labelText: 'Credit', border: OutlineInputBorder()),
+              onChanged: (x) => setState(() => subs[i].credit = x),
+            ),
+          ),
           const SizedBox(width: 10),
-          Expanded(flex: 3, child: dd('Grade', subs[i].grade, gp.keys.toList(), (x) => setState(() => subs[i].grade = x))),
+          Expanded(
+            flex: 3,
+            child: DropdownButtonFormField<String>(
+              initialValue: subs[i].grade,
+              decoration: const InputDecoration(labelText: 'Grade', border: OutlineInputBorder()),
+              items: gp.keys.map((k) => DropdownMenuItem(value: k, child: Text(k))).toList(),
+              onChanged: (x) => setState(() => subs[i].grade = x!),
+            ),
+          ),
           IconButton(
               icon: const Icon(Icons.delete_outline),
               onPressed: subs.length > 1 ? () => setState(() => subs.removeAt(i)) : null),
@@ -47,9 +62,21 @@ class _CgpaGpaScreen extends State<CgpaGpaScreen> {
           icon: const Icon(Icons.add),
           label: const Text('Add Subject')),
       Row(children: [
-        Expanded(child: tf('Previous CGPA', pg, (x) => setState(() => pg = x))),
+        Expanded(
+          child: TextField(
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: const InputDecoration(labelText: 'Previous CGPA', border: OutlineInputBorder()),
+            onChanged: (x) => setState(() => pg = x),
+          ),
+        ),
         const SizedBox(width: 10),
-        Expanded(child: tf('Previous Credits', pc, (x) => setState(() => pc = x))),
+        Expanded(
+          child: TextField(
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: const InputDecoration(labelText: 'Previous Credits', border: OutlineInputBorder()),
+            onChanged: (x) => setState(() => pc = x),
+          ),
+        ),
       ]),
       hero(widget.t, 'Semester GPA', fmt(tc > 0 ? pts / tc : 0.0, 2)),
       rows([

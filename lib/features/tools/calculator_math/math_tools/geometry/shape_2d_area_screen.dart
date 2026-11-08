@@ -1,15 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class Shape2dAreaScreen extends StatefulWidget {
+class Shape2dAreaScreen extends ConsumerStatefulWidget {
   const Shape2dAreaScreen({super.key});
 
   @override
-  State<Shape2dAreaScreen> createState() => _Shape2dAreaScreenState();
+  ConsumerState<Shape2dAreaScreen> createState() => _Shape2dAreaScreenState();
 }
 
-class _Shape2dAreaScreenState extends State<Shape2dAreaScreen> {
+class _Shape2dAreaScreenState extends ConsumerState<Shape2dAreaScreen> {
   String _selectedShape = 'Circle';
   final TextEditingController _param1Ctrl = TextEditingController(text: '7');
   final TextEditingController _param2Ctrl = TextEditingController(text: '10');
@@ -43,15 +46,19 @@ class _Shape2dAreaScreenState extends State<Shape2dAreaScreen> {
       double base = p1, height = p2;
       setState(() {
         _area = 0.5 * base * height;
-        _perimeter = 3 * base; // Approx for equilateral
+        _perimeter = 3 * base;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('area_2d_shape_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('2D Shape Area & Perimeter')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -64,8 +71,8 @@ class _Shape2dAreaScreenState extends State<Shape2dAreaScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Column(children: [const Text('Area (ক্ষেত্রফল)', style: TextStyle(color: Colors.white70)), Text(_area.toStringAsFixed(2), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.amberAccent))]),
-                    Column(children: [const Text('Perimeter (পরিসীমা)', style: TextStyle(color: Colors.white70)), Text(_perimeter.toStringAsFixed(2), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.lightGreenAccent))]),
+                    Column(children: [Text(langNotifier.translate('area_2d'), style: const TextStyle(color: Colors.white70)), Text(_area.toStringAsFixed(2), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.amberAccent))]),
+                    Column(children: [Text(langNotifier.translate('perimeter_2d'), style: const TextStyle(color: Colors.white70)), Text(_perimeter.toStringAsFixed(2), style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.lightGreenAccent))]),
                   ],
                 ),
               ),

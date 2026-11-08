@@ -1,16 +1,19 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class ApGpSeriesScreen extends StatefulWidget {
+class ApGpSeriesScreen extends ConsumerStatefulWidget {
   const ApGpSeriesScreen({super.key});
 
   @override
-  State<ApGpSeriesScreen> createState() => _ApGpSeriesScreenState();
+  ConsumerState<ApGpSeriesScreen> createState() => _ApGpSeriesScreenState();
 }
 
-class _ApGpSeriesScreenState extends State<ApGpSeriesScreen> {
-  bool _isAp = true; // true = AP (Arithmetic), false = GP (Geometric)
+class _ApGpSeriesScreenState extends ConsumerState<ApGpSeriesScreen> {
+  bool _isAp = true;
   final TextEditingController _firstTermCtrl = TextEditingController(text: '2');
   final TextEditingController _diffRatioCtrl = TextEditingController(text: '3');
   final TextEditingController _nTermsCtrl = TextEditingController(text: '10');
@@ -51,8 +54,11 @@ class _ApGpSeriesScreenState extends State<ApGpSeriesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('ap_gp_series_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('AP & GP Series Calculator')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(

@@ -35,22 +35,33 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
+                color: Theme.of(context).colorScheme.surface,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
-                    blurRadius: 20,
-                    spreadRadius: 5,
+                    blurRadius: 24,
+                    spreadRadius: 6,
                   ),
                 ],
               ),
-              child: Icon(
-                Icons.grid_view_rounded,
-                size: 72,
-                color: Theme.of(context).colorScheme.primary,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(60),
+                child: Image.asset(
+                  'assets/logo/logo.png',
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.grid_view_rounded,
+                      size: 72,
+                      color: Theme.of(context).colorScheme.primary,
+                    );
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 24),
@@ -63,6 +74,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             const SizedBox(height: 8),
             Text(
               langNotifier.translate('app_subtitle'),
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),

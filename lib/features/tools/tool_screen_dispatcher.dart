@@ -8,6 +8,9 @@ import '../../core/providers/history_provider.dart';
 import 'calculator_math/calculator_tools_screen.dart';
 
 // Math & Finance subfolder imports
+import 'calculator_math/math_tools/age_and_date/age_calculator_screen.dart';
+import 'calculator_math/math_tools/age_and_date/date_difference_screen.dart';
+
 import 'calculator_math/math_tools/finance/compound_interest_screen.dart';
 import 'calculator_math/math_tools/finance/simple_interest_screen.dart';
 import 'calculator_math/math_tools/finance/gst_vat_screen.dart';
@@ -55,6 +58,8 @@ import 'calculator_math/math_tools/random_generator_screen.dart';
 import 'calculator_math/math_tools/prime_checker_screen.dart';
 import 'calculator_math/math_tools/factorial_calculator_screen.dart';
 
+import 'calculator_math/math_tools/math_utils/math_utils.dart';
+
 import 'pdf_document/pdf_tools_screen.dart';
 import 'image_photo/image_tools_screen.dart';
 import 'qr_barcode/qr_tools_screen.dart';
@@ -85,6 +90,14 @@ class ToolScreenDispatcher {
 
       case 'scientific_calc':
         screen = const ScientificCalculatorScreen();
+        break;
+
+      case 'age_calc':
+        screen = const AgeCalculatorScreen();
+        break;
+
+      case 'date_diff_calc':
+        screen = const DateDifferenceScreen();
         break;
 
       case 'percentage_calc':
@@ -249,6 +262,10 @@ class ToolScreenDispatcher {
 
       case 'tally_counter_tool':
         screen = const TallyCounterScreen();
+        break;
+
+      case 'unit_converter_math':
+        screen = tools[11].page(tools[11]);
         break;
 
       // 2. PDF & Document

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class NprNcrScreen extends StatefulWidget {
+class NprNcrScreen extends ConsumerStatefulWidget {
   const NprNcrScreen({super.key});
 
   @override
-  State<NprNcrScreen> createState() => _NprNcrScreenState();
+  ConsumerState<NprNcrScreen> createState() => _NprNcrScreenState();
 }
 
-class _NprNcrScreenState extends State<NprNcrScreen> {
+class _NprNcrScreenState extends ConsumerState<NprNcrScreen> {
   final TextEditingController _nCtrl = TextEditingController(text: '7');
   final TextEditingController _rCtrl = TextEditingController(text: '3');
 
@@ -48,8 +51,11 @@ class _NprNcrScreenState extends State<NprNcrScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('npr_ncr_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Permutation & Combination (nPr / nCr)')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(

@@ -1,15 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class LogarithmScreen extends StatefulWidget {
+class LogarithmScreen extends ConsumerStatefulWidget {
   const LogarithmScreen({super.key});
 
   @override
-  State<LogarithmScreen> createState() => _LogarithmScreenState();
+  ConsumerState<LogarithmScreen> createState() => _LogarithmScreenState();
 }
 
-class _LogarithmScreenState extends State<LogarithmScreen> {
+class _LogarithmScreenState extends ConsumerState<LogarithmScreen> {
   final TextEditingController _valCtrl = TextEditingController(text: '100');
   final TextEditingController _baseCtrl = TextEditingController(text: '10');
 
@@ -39,8 +42,11 @@ class _LogarithmScreenState extends State<LogarithmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('logarithm_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Logarithm Calculator')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(

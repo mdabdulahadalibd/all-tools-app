@@ -1,15 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class Shape3dVolumeScreen extends StatefulWidget {
+class Shape3dVolumeScreen extends ConsumerStatefulWidget {
   const Shape3dVolumeScreen({super.key});
 
   @override
-  State<Shape3dVolumeScreen> createState() => _Shape3dVolumeScreenState();
+  ConsumerState<Shape3dVolumeScreen> createState() => _Shape3dVolumeScreenState();
 }
 
-class _Shape3dVolumeScreenState extends State<Shape3dVolumeScreen> {
+class _Shape3dVolumeScreenState extends ConsumerState<Shape3dVolumeScreen> {
   String _selectedShape = 'Cylinder';
   final TextEditingController _rCtrl = TextEditingController(text: '5');
   final TextEditingController _hCtrl = TextEditingController(text: '10');
@@ -48,8 +51,12 @@ class _Shape3dVolumeScreenState extends State<Shape3dVolumeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('volume_3d_shape_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('3D Shape Volume & Surface Area')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -62,8 +69,8 @@ class _Shape3dVolumeScreenState extends State<Shape3dVolumeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Column(children: [const Text('Volume (আয়তন)', style: TextStyle(color: Colors.white70)), Text(_volume.toStringAsFixed(2), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.amberAccent))]),
-                    Column(children: [const Text('Surface Area (পৃষ্ঠতল)', style: TextStyle(color: Colors.white70)), Text(_surfaceArea.toStringAsFixed(2), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.lightGreenAccent))]),
+                    Column(children: [Text(langNotifier.translate('volume_3d'), style: const TextStyle(color: Colors.white70)), Text(_volume.toStringAsFixed(2), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.amberAccent))]),
+                    Column(children: [Text(langNotifier.translate('surface_area_3d'), style: const TextStyle(color: Colors.white70)), Text(_surfaceArea.toStringAsFixed(2), style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.lightGreenAccent))]),
                   ],
                 ),
               ),

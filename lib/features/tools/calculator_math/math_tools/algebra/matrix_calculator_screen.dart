@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class MatrixCalculatorScreen extends StatefulWidget {
+class MatrixCalculatorScreen extends ConsumerStatefulWidget {
   const MatrixCalculatorScreen({super.key});
 
   @override
-  State<MatrixCalculatorScreen> createState() => _MatrixCalculatorScreenState();
+  ConsumerState<MatrixCalculatorScreen> createState() => _MatrixCalculatorScreenState();
 }
 
-class _MatrixCalculatorScreenState extends State<MatrixCalculatorScreen> {
-  // 2x2 Matrix inputs: a, b, c, d
+class _MatrixCalculatorScreenState extends ConsumerState<MatrixCalculatorScreen> {
   double _a = 2, _b = 3, _c = 1, _d = 4;
 
   double get _determinant => (_a * _d) - (_b * _c);
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('matrix_determinant_calc');
     double det = _determinant;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('2x2 Matrix & Determinant Solver')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -41,7 +45,7 @@ class _MatrixCalculatorScreenState extends State<MatrixCalculatorScreen> {
                     Text(
                       det != 0
                           ? 'Inverse Matrix A⁻¹ exists:\n[  ${(_d / det).toStringAsFixed(2)}   ${(-_b / det).toStringAsFixed(2)}  ]\n[  ${(-_c / det).toStringAsFixed(2)}   ${(_a / det).toStringAsFixed(2)}  ]'
-                          : 'Singular Matrix (Determinant = 0, Inverse does not exist)',
+                          : 'Singular Matrix (Determinant = 0)',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontFamily: 'monospace', fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
                     ),

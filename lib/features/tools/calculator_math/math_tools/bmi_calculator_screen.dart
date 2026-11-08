@@ -16,7 +16,7 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
   final TextEditingController _heightCmCtrl = TextEditingController(text: '172');
 
   double _bmiValue = 23.0;
-  String _bmiCategory = 'Normal Weight';
+  String _bmiCategoryKey = 'normal_weight';
 
   @override
   void initState() {
@@ -33,25 +33,26 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
     double meters = cm / 100;
     double bmi = w / (meters * meters);
 
-    String cat = 'Normal Weight';
+    String key = 'normal_weight';
     if (bmi < 18.5) {
-      cat = 'Underweight';
+      key = 'underweight';
     } else if (bmi >= 18.5 && bmi < 24.9) {
-      cat = 'Normal Weight (Healthy)';
+      key = 'normal_weight';
     } else if (bmi >= 25 && bmi < 29.9) {
-      cat = 'Overweight';
+      key = 'overweight';
     } else {
-      cat = 'Obese';
+      key = 'obese';
     }
 
     setState(() {
       _bmiValue = bmi;
-      _bmiCategory = cat;
+      _bmiCategoryKey = key;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('bmi_calc');
 
@@ -68,14 +69,14 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Body Mass Index (BMI)', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('body_mass_index'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       _bmiValue.toStringAsFixed(1),
                       style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.amberAccent),
                     ),
                     const SizedBox(height: 4),
-                    Text(_bmiCategory, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                    Text(langNotifier.translate(_bmiCategoryKey), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                   ],
                 ),
               ),
@@ -89,14 +90,14 @@ class _BmiCalculatorScreenState extends ConsumerState<BmiCalculatorScreen> {
                     TextField(
                       controller: _weightKgCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Weight (kg)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('weight_kg'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _heightCmCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Height (cm)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('height_cm'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

@@ -37,6 +37,7 @@ class _DiscountCalculatorScreenState extends ConsumerState<DiscountCalculatorScr
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('discount_calc');
 
@@ -53,7 +54,7 @@ class _DiscountCalculatorScreenState extends ConsumerState<DiscountCalculatorScr
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Final Sale Price', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('final_sale_price'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       '৳ ${_finalPrice.toStringAsFixed(2)}',
@@ -61,7 +62,7 @@ class _DiscountCalculatorScreenState extends ConsumerState<DiscountCalculatorScr
                     ),
                     const Divider(color: Colors.white24, height: 24),
                     Text(
-                      'You Save: ৳ ${_savedAmount.toStringAsFixed(2)} (${_discountPercentCtrl.text}% Off)',
+                      '${langNotifier.translate('you_save')}: ৳ ${_savedAmount.toStringAsFixed(2)} (${_discountPercentCtrl.text}% Off)',
                       style: const TextStyle(fontSize: 16, color: Colors.amberAccent, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -77,14 +78,14 @@ class _DiscountCalculatorScreenState extends ConsumerState<DiscountCalculatorScr
                     TextField(
                       controller: _originalPriceCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Original Price (৳)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('original_price'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _discountPercentCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Discount Rate (%)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('discount_rate'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

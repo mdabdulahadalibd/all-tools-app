@@ -1,4 +1,3 @@
-// ───────────────────────── unit converter ─────────────────────────
 import 'package:all_tools_app/features/tools/calculator_math/math_tools/math_utils/math_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -45,17 +44,35 @@ class _UnitConverterScreen extends State<UnitConverterScreen> {
     final nm = units[cat]!.keys.toList();
     final x = n(val);
     return Pg(widget.t, [
-      dd('Category', cat, units.keys.toList(), (s) {
-        setState(() {
-          cat = s;
-          final l = units[s]!.keys.toList();
-          from = l[0];
-          to = l[1];
-        });
-      }),
-      tf('Value', val, (s) => setState(() => val = s)),
+      DropdownButtonFormField<String>(
+        initialValue: cat,
+        decoration: const InputDecoration(labelText: 'Category', border: OutlineInputBorder()),
+        items: units.keys.map((k) => DropdownMenuItem(value: k, child: Text(k))).toList(),
+        onChanged: (s) {
+          if (s != null) {
+            setState(() {
+              cat = s;
+              final l = units[s]!.keys.toList();
+              from = l[0];
+              to = l[1];
+            });
+          }
+        },
+      ),
+      TextField(
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        decoration: const InputDecoration(labelText: 'Value', border: OutlineInputBorder()),
+        onChanged: (s) => setState(() => val = s),
+      ),
       Row(children: [
-        Expanded(child: dd('From', from, nm, (s) => setState(() => from = s))),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            initialValue: from,
+            decoration: const InputDecoration(labelText: 'From', border: OutlineInputBorder()),
+            items: nm.map((k) => DropdownMenuItem(value: k, child: Text(k))).toList(),
+            onChanged: (s) => setState(() => from = s!),
+          ),
+        ),
         IconButton(
             icon: const Icon(Icons.swap_horiz),
             onPressed: () => setState(() {
@@ -63,7 +80,14 @@ class _UnitConverterScreen extends State<UnitConverterScreen> {
               from = to;
               to = tmp;
             })),
-        Expanded(child: dd('To', to, nm, (s) => setState(() => to = s))),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            initialValue: to,
+            decoration: const InputDecoration(labelText: 'To', border: OutlineInputBorder()),
+            items: nm.map((k) => DropdownMenuItem(value: k, child: Text(k))).toList(),
+            onChanged: (s) => setState(() => to = s!),
+          ),
+        ),
       ]),
       hero(widget.t, '${fmt(x, 6)} $from =', '${fmt(conv(cat, from, to, x), 6)}  $to'),
       rows([for (final k in nm) R(k, fmt(conv(cat, from, k, x), 6))]),

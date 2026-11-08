@@ -1,15 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class PythagorasSolverScreen extends StatefulWidget {
+class PythagorasSolverScreen extends ConsumerStatefulWidget {
   const PythagorasSolverScreen({super.key});
 
   @override
-  State<PythagorasSolverScreen> createState() => _PythagorasSolverScreenState();
+  ConsumerState<PythagorasSolverScreen> createState() => _PythagorasSolverScreenState();
 }
 
-class _PythagorasSolverScreenState extends State<PythagorasSolverScreen> {
+class _PythagorasSolverScreenState extends ConsumerState<PythagorasSolverScreen> {
   final TextEditingController _aCtrl = TextEditingController(text: '3');
   final TextEditingController _bCtrl = TextEditingController(text: '4');
 
@@ -33,8 +36,12 @@ class _PythagorasSolverScreenState extends State<PythagorasSolverScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('pythagoras_triangle_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Pythagoras Theorem Solver')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -46,7 +53,7 @@ class _PythagorasSolverScreenState extends State<PythagorasSolverScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Hypotenuse c = √(a² + b²)', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('hypotenuse'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       _hypotenuseC.toStringAsFixed(2),
@@ -65,14 +72,14 @@ class _PythagorasSolverScreenState extends State<PythagorasSolverScreen> {
                     TextField(
                       controller: _aCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Perpendicular Side (a)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('perpendicular_side'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _bCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Base Side (b)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('base_side'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

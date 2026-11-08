@@ -39,6 +39,7 @@ class _ProfitLossCalculatorScreenState extends ConsumerState<ProfitLossCalculato
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('profit_loss_calc');
     bool isProfit = _profitAmount >= 0;
@@ -56,7 +57,7 @@ class _ProfitLossCalculatorScreenState extends ConsumerState<ProfitLossCalculato
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Text(isProfit ? 'Net Profit Gain' : 'Net Loss', style: const TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(isProfit ? langNotifier.translate('net_profit') : langNotifier.translate('net_loss'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       '৳ ${_profitAmount.abs().toStringAsFixed(2)}',
@@ -64,7 +65,7 @@ class _ProfitLossCalculatorScreenState extends ConsumerState<ProfitLossCalculato
                     ),
                     const Divider(color: Colors.white24, height: 24),
                     Text(
-                      '${isProfit ? 'Profit' : 'Loss'} Rate: ${_profitPercent.abs().toStringAsFixed(2)}%',
+                      'Rate: ${_profitPercent.abs().toStringAsFixed(2)}%',
                       style: const TextStyle(fontSize: 18, color: Colors.amberAccent, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -80,14 +81,14 @@ class _ProfitLossCalculatorScreenState extends ConsumerState<ProfitLossCalculato
                     TextField(
                       controller: _costPriceCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Cost Price CP (৳)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('cost_price'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _sellingPriceCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Selling Price SP (৳)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('selling_price'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

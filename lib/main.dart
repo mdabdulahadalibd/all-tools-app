@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/config/app_config.dart';
 import 'core/providers/storage_provider.dart';
 import 'core/providers/theme_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'features/main_navigation/screens/splash_screen.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
 
@@ -30,7 +30,7 @@ class AllToolsApp extends ConsumerWidget {
     final themeMode = ref.watch(themeProvider);
 
     return MaterialApp(
-      title: 'All Tools',
+      title: AppConfig.appNameEn,
       debugShowCheckedModeBanner: false,
       themeMode: themeMode,
       theme: AppTheme.lightTheme,
@@ -39,5 +39,3 @@ class AllToolsApp extends ConsumerWidget {
     );
   }
 }
-
-// OneTools Studio name app a diye daw and bangla and english jno kaj kore and appconfig a kore daw jno ak jaiga theke chnage korle sob jaigai chnage hoi

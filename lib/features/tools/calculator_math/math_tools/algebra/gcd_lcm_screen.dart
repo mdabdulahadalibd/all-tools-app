@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class GcdLcmScreen extends StatefulWidget {
+class GcdLcmScreen extends ConsumerStatefulWidget {
   const GcdLcmScreen({super.key});
 
   @override
-  State<GcdLcmScreen> createState() => _GcdLcmScreenState();
+  ConsumerState<GcdLcmScreen> createState() => _GcdLcmScreenState();
 }
 
-class _GcdLcmScreenState extends State<GcdLcmScreen> {
+class _GcdLcmScreenState extends ConsumerState<GcdLcmScreen> {
   final TextEditingController _num1Ctrl = TextEditingController(text: '24');
   final TextEditingController _num2Ctrl = TextEditingController(text: '36');
 
@@ -41,8 +44,11 @@ class _GcdLcmScreenState extends State<GcdLcmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('gcd_lcm_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('GCD & LCM Calculator')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(

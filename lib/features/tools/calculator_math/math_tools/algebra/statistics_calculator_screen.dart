@@ -1,15 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class StatisticsCalculatorScreen extends StatefulWidget {
+class StatisticsCalculatorScreen extends ConsumerStatefulWidget {
   const StatisticsCalculatorScreen({super.key});
 
   @override
-  State<StatisticsCalculatorScreen> createState() => _StatisticsCalculatorScreenState();
+  ConsumerState<StatisticsCalculatorScreen> createState() => _StatisticsCalculatorScreenState();
 }
 
-class _StatisticsCalculatorScreenState extends State<StatisticsCalculatorScreen> {
+class _StatisticsCalculatorScreenState extends ConsumerState<StatisticsCalculatorScreen> {
   final TextEditingController _dataCtrl = TextEditingController(text: '12, 15, 18, 20, 15, 25, 30');
 
   double _mean = 0.0;
@@ -69,8 +72,11 @@ class _StatisticsCalculatorScreenState extends State<StatisticsCalculatorScreen>
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('statistics_calc');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Statistics Calculator')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
@@ -88,7 +94,7 @@ class _StatisticsCalculatorScreenState extends State<StatisticsCalculatorScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Column(children: [const Text('Mean (গড়)', style: TextStyle(color: Colors.white70)), Text(_mean.toStringAsFixed(2), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amberAccent))]),
-                        Column(children: [const Text('Median (মধ্যক)', style: TextStyle(color: Colors.white70)), Text(_median.toStringAsFixed(2), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.greenAccent))]),
+                        Column(children: [const Text('Median (मध्यक)', style: TextStyle(color: Colors.white70)), Text(_median.toStringAsFixed(2), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.greenAccent))]),
                       ],
                     ),
                     const Divider(color: Colors.white24, height: 20),

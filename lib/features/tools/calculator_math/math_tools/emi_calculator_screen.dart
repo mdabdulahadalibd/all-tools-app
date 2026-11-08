@@ -49,6 +49,7 @@ class _EmiCalculatorScreenState extends ConsumerState<EmiCalculatorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('emi_calc');
 
@@ -65,7 +66,7 @@ class _EmiCalculatorScreenState extends ConsumerState<EmiCalculatorScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Monthly Installment EMI', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('monthly_installment_emi'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       '৳ ${_monthlyEmi.toStringAsFixed(2)}',
@@ -75,8 +76,8 @@ class _EmiCalculatorScreenState extends ConsumerState<EmiCalculatorScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(children: [const Text('Total Interest', style: TextStyle(color: Colors.white70, fontSize: 12)), Text('৳ ${_totalInterest.toStringAsFixed(0)}', style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 16))]),
-                        Column(children: [const Text('Total Payment', style: TextStyle(color: Colors.white70, fontSize: 12)), Text('৳ ${_totalPayment.toStringAsFixed(0)}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16))]),
+                        Column(children: [Text(langNotifier.translate('total_interest'), style: const TextStyle(color: Colors.white70, fontSize: 12)), Text('৳ ${_totalInterest.toStringAsFixed(0)}', style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 16))]),
+                        Column(children: [Text(langNotifier.translate('total_payment'), style: const TextStyle(color: Colors.white70, fontSize: 12)), Text('৳ ${_totalPayment.toStringAsFixed(0)}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16))]),
                       ],
                     ),
                   ],
@@ -92,21 +93,21 @@ class _EmiCalculatorScreenState extends ConsumerState<EmiCalculatorScreen> {
                     TextField(
                       controller: _loanAmountCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Loan Principal Amount (৳)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('loan_principal'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _rateCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Interest Rate (% p.a.)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('interest_rate_pa'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _tenureYearsCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Loan Tenure (Years)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('loan_tenure'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

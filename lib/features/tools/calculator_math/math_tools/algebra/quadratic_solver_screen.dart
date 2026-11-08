@@ -1,15 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/constants/tool_categories.dart';
+import '../../../../../core/localization/localization_provider.dart';
 import '../../../../common/widgets/responsive_container.dart';
 
-class QuadraticSolverScreen extends StatefulWidget {
+class QuadraticSolverScreen extends ConsumerStatefulWidget {
   const QuadraticSolverScreen({super.key});
 
   @override
-  State<QuadraticSolverScreen> createState() => _QuadraticSolverScreenState();
+  ConsumerState<QuadraticSolverScreen> createState() => _QuadraticSolverScreenState();
 }
 
-class _QuadraticSolverScreenState extends State<QuadraticSolverScreen> {
+class _QuadraticSolverScreenState extends ConsumerState<QuadraticSolverScreen> {
   final TextEditingController _aCtrl = TextEditingController(text: '1');
   final TextEditingController _bCtrl = TextEditingController(text: '-5');
   final TextEditingController _cCtrl = TextEditingController(text: '6');
@@ -65,8 +68,11 @@ class _QuadraticSolverScreenState extends State<QuadraticSolverScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('quadratic_equation_solver');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Quadratic Equation Solver')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 700,
         child: ListView(
