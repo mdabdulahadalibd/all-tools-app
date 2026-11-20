@@ -19,7 +19,8 @@ class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
   final TextEditingController _m2Ctrl = TextEditingController(text: '30');
 
   bool _isAdd = true;
-  String _resultStr = '4 Hours 15 Minutes';
+  int _resultHours = 4;
+  int _resultMins = 15;
 
   @override
   void initState() {
@@ -43,7 +44,8 @@ class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
     int mins = totalMins % 60;
 
     setState(() {
-      _resultStr = '$hrs Hours $mins Minutes';
+      _resultHours = hrs;
+      _resultMins = mins;
     });
   }
 
@@ -69,7 +71,8 @@ class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
                     Text(langNotifier.translate('total_time_duration'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
-                      _resultStr,
+                      '$_resultHours ${langNotifier.translate('hours_unit')} $_resultMins ${langNotifier.translate('minutes_unit')}',
+                      textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.amberAccent),
                     ),
                   ],
@@ -86,7 +89,7 @@ class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
                       children: [
                         Expanded(
                           child: ChoiceChip(
-                            label: const Text('Add Time (+)'),
+                            label: Text(langNotifier.translate('add_time')),
                             selected: _isAdd,
                             onSelected: (v) {
                               if (v) {
@@ -99,7 +102,7 @@ class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: ChoiceChip(
-                            label: const Text('Subtract Time (-)'),
+                            label: Text(langNotifier.translate('subtract_time')),
                             selected: !_isAdd,
                             onSelected: (v) {
                               if (v) {
@@ -118,7 +121,7 @@ class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
                           child: TextField(
                             controller: _h1Ctrl,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(labelText: 'Time 1 (Hours)', border: OutlineInputBorder()),
+                            decoration: InputDecoration(labelText: langNotifier.translate('time_1_hours'), border: const OutlineInputBorder()),
                             onChanged: (_) => _calculate(),
                           ),
                         ),
@@ -127,7 +130,7 @@ class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
                           child: TextField(
                             controller: _m1Ctrl,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(labelText: 'Time 1 (Minutes)', border: OutlineInputBorder()),
+                            decoration: InputDecoration(labelText: langNotifier.translate('time_1_mins'), border: const OutlineInputBorder()),
                             onChanged: (_) => _calculate(),
                           ),
                         ),
@@ -140,7 +143,7 @@ class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
                           child: TextField(
                             controller: _h2Ctrl,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(labelText: 'Time 2 (Hours)', border: OutlineInputBorder()),
+                            decoration: InputDecoration(labelText: langNotifier.translate('time_2_hours'), border: const OutlineInputBorder()),
                             onChanged: (_) => _calculate(),
                           ),
                         ),
@@ -149,7 +152,7 @@ class _TimeMathScreenState extends ConsumerState<TimeMathScreen> {
                           child: TextField(
                             controller: _m2Ctrl,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(labelText: 'Time 2 (Minutes)', border: OutlineInputBorder()),
+                            decoration: InputDecoration(labelText: langNotifier.translate('time_2_mins'), border: const OutlineInputBorder()),
                             onChanged: (_) => _calculate(),
                           ),
                         ),

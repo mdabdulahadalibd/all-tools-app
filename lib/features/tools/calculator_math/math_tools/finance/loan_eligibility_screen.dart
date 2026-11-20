@@ -57,6 +57,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('loan_eligibility_calc');
 
@@ -73,7 +74,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Maximum Eligible Loan Amount', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('max_eligible_loan'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       '৳ ${_maxLoanAmount.toStringAsFixed(0)}',
@@ -81,7 +82,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                     ),
                     const Divider(color: Colors.white24, height: 24),
                     Text(
-                      'Max Affordable Monthly EMI: ৳ ${_maxEligibleEmi.toStringAsFixed(0)}',
+                      '${langNotifier.translate('max_affordable_emi')}: ৳ ${_maxEligibleEmi.toStringAsFixed(0)}',
                       style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -97,14 +98,14 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                     TextField(
                       controller: _incomeCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Monthly Net Income (৳)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('monthly_net_income'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _existingEmiCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Existing Monthly EMIs / Obligations (৳)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('existing_monthly_emi'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
@@ -114,7 +115,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                           child: TextField(
                             controller: _rateCtrl,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(labelText: 'Expected Rate (% p.a.)', border: OutlineInputBorder()),
+                            decoration: InputDecoration(labelText: langNotifier.translate('expected_rate_pa'), border: const OutlineInputBorder()),
                             onChanged: (_) => _calculate(),
                           ),
                         ),
@@ -123,7 +124,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                           child: TextField(
                             controller: _tenureYearsCtrl,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(labelText: 'Tenure (Years)', border: OutlineInputBorder()),
+                            decoration: InputDecoration(labelText: langNotifier.translate('tenure_years'), border: const OutlineInputBorder()),
                             onChanged: (_) => _calculate(),
                           ),
                         ),

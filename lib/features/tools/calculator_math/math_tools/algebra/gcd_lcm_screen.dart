@@ -44,6 +44,7 @@ class _GcdLcmScreenState extends ConsumerState<GcdLcmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('gcd_lcm_calc');
 
@@ -63,14 +64,14 @@ class _GcdLcmScreenState extends ConsumerState<GcdLcmScreen> {
                   children: [
                     Column(
                       children: [
-                        const Text('GCD (গ.সা.গু)', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                        Text(langNotifier.translate('gcd_label'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                         const SizedBox(height: 8),
                         Text('$_gcd', style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
                       ],
                     ),
                     Column(
                       children: [
-                        const Text('LCM (ল.সা.গু)', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                        Text(langNotifier.translate('lcm_label'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                         const SizedBox(height: 8),
                         Text('$_lcm', style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.greenAccent)),
                       ],
@@ -88,14 +89,14 @@ class _GcdLcmScreenState extends ConsumerState<GcdLcmScreen> {
                     TextField(
                       controller: _num1Ctrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'First Integer Number', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('first_integer'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _num2Ctrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Second Integer Number', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('second_integer'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

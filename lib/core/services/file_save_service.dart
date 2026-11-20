@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'web_download_stub.dart' if (dart.library.html) 'web_download_helper.dart';
+
 class FileSaveService {
   /// Save high-quality images directly to local storage / gallery folder
   static Future<String?> saveImageToDevice(
@@ -14,10 +16,14 @@ class FileSaveService {
   }) async {
     try {
       if (kIsWeb) {
+        final bytes = await imageFile.readAsBytes();
+        final filename = '${prefix}_HQ_${DateTime.now().millisecondsSinceEpoch}.$extension';
+        downloadBytesInBrowser(bytes, filename);
+
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('$prefix exported in High Quality in browser!'),
+              content: Text('$prefix downloaded successfully in browser!'),
               backgroundColor: Colors.green,
             ),
           );
@@ -64,19 +70,24 @@ class FileSaveService {
     }
   }
 
-  /// Save generated High-Quality PDF documents directly to device storage
+  /// Save generated High-Quality PDF documents directly to device storage or browser download
   static Future<String?> savePdfToDevice(
     BuildContext context,
     Uint8List pdfBytes,
     String prefix,
   ) async {
     try {
+      final String fileName = '${prefix}_HQ_${DateTime.now().millisecondsSinceEpoch}.pdf';
+
       if (kIsWeb) {
+        downloadBytesInBrowser(pdfBytes, fileName);
+
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('PDF $prefix generated & exported!'),
+              content: Text('PDF Document downloaded in browser! ($fileName)'),
               backgroundColor: Colors.green,
+              duration: const Duration(seconds: 4),
             ),
           );
         }
@@ -89,9 +100,7 @@ class FileSaveService {
       }
       saveDir ??= await getApplicationDocumentsDirectory();
 
-      final String fileName = '${prefix}_HQ_${DateTime.now().millisecondsSinceEpoch}.pdf';
       final String targetPath = '${saveDir.path}/$fileName';
-
       final File pdfFile = File(targetPath);
       await pdfFile.writeAsBytes(pdfBytes, flush: true);
 

@@ -27,6 +27,7 @@ class _TimezoneConverterScreenState extends ConsumerState<TimezoneConverterScree
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('timezone_converter_calc');
 
@@ -50,7 +51,7 @@ class _TimezoneConverterScreenState extends ConsumerState<TimezoneConverterScree
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Text('Target Time ($_toZone)', style: const TextStyle(color: Colors.white70, fontSize: 15)),
+                    Text('${langNotifier.translate('target_time')} ($_toZone)', style: const TextStyle(color: Colors.white70, fontSize: 15)),
                     const SizedBox(height: 8),
                     Text(
                       '${targetTime.hour.toString().padLeft(2, '0')}:${targetTime.minute.toString().padLeft(2, '0')}',
@@ -58,7 +59,7 @@ class _TimezoneConverterScreenState extends ConsumerState<TimezoneConverterScree
                     ),
                     const Divider(color: Colors.white24, height: 24),
                     Text(
-                      'Time Offset Difference: ${diffHours >= 0 ? "+$diffHours" : diffHours} Hours',
+                      '${langNotifier.translate('time_offset_diff')}: ${diffHours >= 0 ? "+$diffHours" : diffHours} Hours',
                       style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -73,7 +74,7 @@ class _TimezoneConverterScreenState extends ConsumerState<TimezoneConverterScree
                   children: [
                     DropdownButtonFormField<String>(
                       initialValue: _fromZone,
-                      decoration: const InputDecoration(labelText: 'From Time Zone', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('from_time_zone'), border: const OutlineInputBorder()),
                       items: _zoneOffsetsHours.keys.map((z) => DropdownMenuItem(value: z, child: Text(z))).toList(),
                       onChanged: (v) {
                         if (v != null) setState(() => _fromZone = v);
@@ -82,7 +83,7 @@ class _TimezoneConverterScreenState extends ConsumerState<TimezoneConverterScree
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
                       initialValue: _toZone,
-                      decoration: const InputDecoration(labelText: 'To Time Zone', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('to_time_zone'), border: const OutlineInputBorder()),
                       items: _zoneOffsetsHours.keys.map((z) => DropdownMenuItem(value: z, child: Text(z))).toList(),
                       onChanged: (v) {
                         if (v != null) setState(() => _toZone = v);

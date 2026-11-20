@@ -54,6 +54,7 @@ class _ApGpSeriesScreenState extends ConsumerState<ApGpSeriesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('ap_gp_series_calc');
 
@@ -70,11 +71,11 @@ class _ApGpSeriesScreenState extends ConsumerState<ApGpSeriesScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Text(_isAp ? 'Arithmetic Progression (AP)' : 'Geometric Progression (GP)', style: const TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(_isAp ? langNotifier.translate('arithmetic_progression') : langNotifier.translate('geometric_progression'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 12),
-                    Text('${_nTermsCtrl.text}-th Term: ${_nthTerm.toStringAsFixed(2)}', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
+                    Text('${_nTermsCtrl.text}${langNotifier.translate('th_term')}: ${_nthTerm.toStringAsFixed(2)}', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
                     const SizedBox(height: 6),
-                    Text('Sum of ${_nTermsCtrl.text} Terms: ${_sumN.toStringAsFixed(2)}', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.lightGreenAccent)),
+                    Text('${langNotifier.translate('sum_of_terms')} (${_nTermsCtrl.text}): ${_sumN.toStringAsFixed(2)}', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.lightGreenAccent)),
                   ],
                 ),
               ),
@@ -89,7 +90,7 @@ class _ApGpSeriesScreenState extends ConsumerState<ApGpSeriesScreen> {
                       children: [
                         Expanded(
                           child: ChoiceChip(
-                            label: const Text('Arithmetic (AP)'),
+                            label: Text(langNotifier.translate('arithmetic_progression')),
                             selected: _isAp,
                             onSelected: (v) {
                               if (v) {
@@ -102,7 +103,7 @@ class _ApGpSeriesScreenState extends ConsumerState<ApGpSeriesScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: ChoiceChip(
-                            label: const Text('Geometric (GP)'),
+                            label: Text(langNotifier.translate('geometric_progression')),
                             selected: !_isAp,
                             onSelected: (v) {
                               if (v) {
@@ -118,21 +119,21 @@ class _ApGpSeriesScreenState extends ConsumerState<ApGpSeriesScreen> {
                     TextField(
                       controller: _firstTermCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'First Term (a)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('first_term'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _diffRatioCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(labelText: _isAp ? 'Common Difference (d)' : 'Common Ratio (r)', border: const OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: _isAp ? langNotifier.translate('common_difference') : langNotifier.translate('common_ratio'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _nTermsCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Number of Terms (n)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('number_of_terms'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

@@ -51,6 +51,7 @@ class _NprNcrScreenState extends ConsumerState<NprNcrScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('npr_ncr_calc');
 
@@ -70,14 +71,14 @@ class _NprNcrScreenState extends ConsumerState<NprNcrScreen> {
                   children: [
                     Column(
                       children: [
-                        const Text('Permutation (nPr)', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                        Text(langNotifier.translate('permutation_npr'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                         const SizedBox(height: 8),
                         Text('$_nPr', style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
                       ],
                     ),
                     Column(
                       children: [
-                        const Text('Combination (nCr)', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                        Text(langNotifier.translate('combination_ncr'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                         const SizedBox(height: 8),
                         Text('$_nCr', style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.lightGreenAccent)),
                       ],
@@ -95,14 +96,14 @@ class _NprNcrScreenState extends ConsumerState<NprNcrScreen> {
                     TextField(
                       controller: _nCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Total Items (n)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('total_items_n'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _rCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Selected Items (r)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('selected_items_r'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

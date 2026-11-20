@@ -44,6 +44,7 @@ class _InflationSalaryScreenState extends ConsumerState<InflationSalaryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('inflation_salary_calc');
 
@@ -60,7 +61,7 @@ class _InflationSalaryScreenState extends ConsumerState<InflationSalaryScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Text('Required Future Salary in ${_yearsCtrl.text} Years', style: const TextStyle(color: Colors.white70, fontSize: 15)),
+                    Text(langNotifier.translate('req_future_salary'), style: const TextStyle(color: Colors.white70, fontSize: 15)),
                     const SizedBox(height: 8),
                     Text(
                       '৳ ${_futureRequiredSalary.toStringAsFixed(0)}',
@@ -68,7 +69,7 @@ class _InflationSalaryScreenState extends ConsumerState<InflationSalaryScreen> {
                     ),
                     const Divider(color: Colors.white24, height: 24),
                     Text(
-                      'Purchasing Power of Today\'s ৳ ${_currentSalaryCtrl.text}: ৳ ${_purchasingPower.toStringAsFixed(0)}',
+                      '${langNotifier.translate('purchasing_power')} ৳ ${_currentSalaryCtrl.text}: ৳ ${_purchasingPower.toStringAsFixed(0)}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -85,21 +86,21 @@ class _InflationSalaryScreenState extends ConsumerState<InflationSalaryScreen> {
                     TextField(
                       controller: _currentSalaryCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Current Monthly Expenses / Salary (৳)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('current_monthly_expenses'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _inflationRateCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Expected Inflation Rate (% p.a.)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('expected_inflation_rate'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _yearsCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Time Horizon (Years)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('time_horizon_years'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

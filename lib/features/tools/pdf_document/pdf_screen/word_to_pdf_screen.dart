@@ -1,34 +1,40 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/constants/tool_categories.dart';
+import '../../../../core/localization/localization_provider.dart';
 import '../../../../core/services/file_save_service.dart';
 import '../../../common/widgets/responsive_container.dart';
 import '../pdf_utils/pdf_models.dart';
 
-class WordToPdfScreen extends StatefulWidget {
+class WordToPdfScreen extends ConsumerStatefulWidget {
   const WordToPdfScreen({super.key});
 
   @override
-  State<WordToPdfScreen> createState() => _WordToPdfScreenState();
+  ConsumerState<WordToPdfScreen> createState() => _WordToPdfScreenState();
 }
 
-class _WordToPdfScreenState extends State<WordToPdfScreen> {
-  final String _selectedDocName = 'Sample_Document.docx';
+class _WordToPdfScreenState extends ConsumerState<WordToPdfScreen> {
+  final String _docName = 'Project_Proposal.docx';
 
   @override
   Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('word_to_pdf');
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Word to PDF Converter')),
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
       body: ResponsiveContainer(
         maxWidth: 800,
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            pdfHero('Word / Doc to PDF Converter', 'Convert Microsoft Word (DOCX) files to clean PDF format', Colors.blue, Icons.article),
+            pdfHero(tool.getTitle(lang), tool.getDescription(lang), Colors.blue, Icons.article),
             const SizedBox(height: 16),
             Card(
               child: ListTile(
-                leading: const Icon(Icons.description, color: Colors.blue),
-                title: Text(_selectedDocName, style: const TextStyle(fontWeight: FontWeight.bold)),
+                leading: const Icon(Icons.description, color: Colors.blue, size: 36),
+                title: Text(_docName, style: const TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: const Text('Microsoft Word Document (.docx)'),
               ),
             ),
@@ -40,9 +46,10 @@ class _WordToPdfScreenState extends State<WordToPdfScreen> {
                 foregroundColor: Colors.white,
               ),
               icon: const Icon(Icons.picture_as_pdf),
-              label: const Text('Convert & Save as PDF', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              label: const Text('Convert & Export PDF File', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               onPressed: () async {
-                await FileSaveService.savePdfToDevice(context, Uint8List.fromList('Word Converted PDF Data'.codeUnits), 'Word_Converted');
+                final dummyBytes = Uint8List.fromList('Word to PDF Stream Data'.codeUnits);
+                await FileSaveService.savePdfToDevice(context, dummyBytes, 'Word_Converted');
               },
             ),
           ],

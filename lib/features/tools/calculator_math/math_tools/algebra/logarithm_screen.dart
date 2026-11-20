@@ -42,6 +42,7 @@ class _LogarithmScreenState extends ConsumerState<LogarithmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('logarithm_calc');
 
@@ -66,7 +67,7 @@ class _LogarithmScreenState extends ConsumerState<LogarithmScreen> {
                     ),
                     const Divider(color: Colors.white24, height: 24),
                     Text(
-                      'Natural Log ln(${_valCtrl.text}): ${_lnValue.toStringAsFixed(6)}',
+                      '${langNotifier.translate('natural_log')} ln(${_valCtrl.text}): ${_lnValue.toStringAsFixed(6)}',
                       style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -82,14 +83,14 @@ class _LogarithmScreenState extends ConsumerState<LogarithmScreen> {
                     TextField(
                       controller: _valCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Value (x > 0)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('value_x'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _baseCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Log Base (b > 0, b ≠ 1)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('log_base'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                   ],

@@ -65,13 +65,14 @@ class _StatisticsCalculatorScreenState extends ConsumerState<StatisticsCalculato
       _count = count;
       _mean = mean;
       _median = median;
-      _mode = modes.isEmpty ? 'No unique mode' : modes.join(', ');
+      _mode = modes.isEmpty ? 'N/A' : modes.join(', ');
       _stdDev = stdDev;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('statistics_calc');
 
@@ -88,21 +89,21 @@ class _StatisticsCalculatorScreenState extends ConsumerState<StatisticsCalculato
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    Text('Data Count: $_count numbers', style: const TextStyle(color: Colors.white70, fontSize: 14)),
+                    Text('${langNotifier.translate('data_count')}: $_count', style: const TextStyle(color: Colors.white70, fontSize: 14)),
                     const SizedBox(height: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(children: [const Text('Mean (গড়)', style: TextStyle(color: Colors.white70)), Text(_mean.toStringAsFixed(2), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amberAccent))]),
-                        Column(children: [const Text('Median (मध्यक)', style: TextStyle(color: Colors.white70)), Text(_median.toStringAsFixed(2), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.greenAccent))]),
+                        Column(children: [Text(langNotifier.translate('mean_label'), style: const TextStyle(color: Colors.white70)), Text(_mean.toStringAsFixed(2), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amberAccent))]),
+                        Column(children: [Text(langNotifier.translate('median_label'), style: const TextStyle(color: Colors.white70)), Text(_median.toStringAsFixed(2), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.greenAccent))]),
                       ],
                     ),
                     const Divider(color: Colors.white24, height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(children: [const Text('Mode (প্রচুরক)', style: TextStyle(color: Colors.white70)), Text(_mode, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white))]),
-                        Column(children: [const Text('Std Dev (σ)', style: TextStyle(color: Colors.white70)), Text(_stdDev.toStringAsFixed(2), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.lightBlueAccent))]),
+                        Column(children: [Text(langNotifier.translate('mode_label'), style: const TextStyle(color: Colors.white70)), Text(_mode, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white))]),
+                        Column(children: [Text(langNotifier.translate('std_dev_label'), style: const TextStyle(color: Colors.white70)), Text(_stdDev.toStringAsFixed(2), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.lightBlueAccent))]),
                       ],
                     ),
                   ],
@@ -116,9 +117,9 @@ class _StatisticsCalculatorScreenState extends ConsumerState<StatisticsCalculato
                 child: TextField(
                   controller: _dataCtrl,
                   maxLines: 3,
-                  decoration: const InputDecoration(
-                    labelText: 'Enter Numbers (comma or space separated)',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: langNotifier.translate('enter_numbers_hint'),
+                    border: const OutlineInputBorder(),
                   ),
                   onChanged: (_) => _calculate(),
                 ),

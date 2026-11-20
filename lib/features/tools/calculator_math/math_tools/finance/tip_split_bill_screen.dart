@@ -38,6 +38,7 @@ class _TipSplitBillScreenState extends ConsumerState<TipSplitBillScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('tip_split_bill_calc');
 
@@ -79,7 +80,7 @@ class _TipSplitBillScreenState extends ConsumerState<TipSplitBillScreen> {
                     TextField(
                       controller: _billAmountCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Total Bill Amount (৳)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('amount_bdt'), border: const OutlineInputBorder()),
                       onChanged: (_) => _calculate(),
                     ),
                     const SizedBox(height: 16),
@@ -98,7 +99,7 @@ class _TipSplitBillScreenState extends ConsumerState<TipSplitBillScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Split Among People:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text(langNotifier.translate('split_among_people'), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                         Row(
                           children: [
                             IconButton.filledTonal(

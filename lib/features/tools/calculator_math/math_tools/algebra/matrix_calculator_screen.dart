@@ -18,6 +18,7 @@ class _MatrixCalculatorScreenState extends ConsumerState<MatrixCalculatorScreen>
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('matrix_determinant_calc');
     double det = _determinant;
@@ -35,7 +36,7 @@ class _MatrixCalculatorScreenState extends ConsumerState<MatrixCalculatorScreen>
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Determinant |A|', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('determinant_label'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 8),
                     Text(
                       det.toStringAsFixed(2),
@@ -44,8 +45,8 @@ class _MatrixCalculatorScreenState extends ConsumerState<MatrixCalculatorScreen>
                     const Divider(color: Colors.white24, height: 24),
                     Text(
                       det != 0
-                          ? 'Inverse Matrix A⁻¹ exists:\n[  ${(_d / det).toStringAsFixed(2)}   ${(-_b / det).toStringAsFixed(2)}  ]\n[  ${(-_c / det).toStringAsFixed(2)}   ${(_a / det).toStringAsFixed(2)}  ]'
-                          : 'Singular Matrix (Determinant = 0)',
+                          ? '${langNotifier.translate('inverse_matrix_exists')}:\n[  ${(_d / det).toStringAsFixed(2)}   ${(-_b / det).toStringAsFixed(2)}  ]\n[  ${(-_c / det).toStringAsFixed(2)}   ${(_a / det).toStringAsFixed(2)}  ]'
+                          : langNotifier.translate('singular_matrix'),
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontFamily: 'monospace', fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
@@ -59,7 +60,7 @@ class _MatrixCalculatorScreenState extends ConsumerState<MatrixCalculatorScreen>
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    const Text('Matrix A Elements [ a  b / c  d ]', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text(langNotifier.translate('matrix_elements'), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                     const SizedBox(height: 16),
                     Row(
                       children: [

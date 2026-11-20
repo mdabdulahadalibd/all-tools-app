@@ -34,7 +34,7 @@ class _QuadraticSolverScreenState extends ConsumerState<QuadraticSolverScreen> {
 
     if (a == 0) {
       setState(() {
-        _root1Str = 'Not a quadratic equation (a ≠ 0)';
+        _root1Str = 'a ≠ 0';
         _root2Str = '';
       });
       return;
@@ -53,7 +53,7 @@ class _QuadraticSolverScreenState extends ConsumerState<QuadraticSolverScreen> {
     } else if (d == 0) {
       double r = -b / (2 * a);
       setState(() {
-        _root1Str = 'Single Root x = ${r.toStringAsFixed(4)}';
+        _root1Str = 'x = ${r.toStringAsFixed(4)}';
         _root2Str = '';
       });
     } else {
@@ -68,6 +68,7 @@ class _QuadraticSolverScreenState extends ConsumerState<QuadraticSolverScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final langNotifier = ref.watch(languageProvider.notifier);
     final lang = ref.watch(languageProvider);
     final tool = ToolCategories.getToolById('quadratic_equation_solver');
 
@@ -84,7 +85,7 @@ class _QuadraticSolverScreenState extends ConsumerState<QuadraticSolverScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    const Text('Equation: ax² + bx + c = 0', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(langNotifier.translate('equation_quadratic'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     const SizedBox(height: 12),
                     Text(_root1Str, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
                     if (_root2Str.isNotEmpty) ...[
@@ -93,7 +94,7 @@ class _QuadraticSolverScreenState extends ConsumerState<QuadraticSolverScreen> {
                     ],
                     const Divider(color: Colors.white24, height: 24),
                     Text(
-                      'Discriminant (D = b² - 4ac): ${_discriminant.toStringAsFixed(2)}',
+                      '${langNotifier.translate('discriminant')}: ${_discriminant.toStringAsFixed(2)}',
                       style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -109,21 +110,21 @@ class _QuadraticSolverScreenState extends ConsumerState<QuadraticSolverScreen> {
                     TextField(
                       controller: _aCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Coefficient a (a ≠ 0)', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('coeff_a'), border: const OutlineInputBorder()),
                       onChanged: (_) => _solve(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _bCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Coefficient b', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('coeff_b'), border: const OutlineInputBorder()),
                       onChanged: (_) => _solve(),
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _cCtrl,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Constant c', border: OutlineInputBorder()),
+                      decoration: InputDecoration(labelText: langNotifier.translate('constant_c'), border: const OutlineInputBorder()),
                       onChanged: (_) => _solve(),
                     ),
                   ],
