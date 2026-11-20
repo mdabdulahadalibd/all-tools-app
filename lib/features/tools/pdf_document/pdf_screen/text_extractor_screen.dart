@@ -1,120 +1,130 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import '../pdf_provider/pdf_tools_provider.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart' as sync_pdf;
 
-class TextExtractorScreen extends ConsumerWidget {
+import '../../../../core/constants/tool_categories.dart';
+import '../../../../core/localization/localization_provider.dart';
+import '../../../common/widgets/responsive_container.dart';
+import '../pdf_utils/pdf_models.dart';
+
+class TextExtractorScreen extends ConsumerStatefulWidget {
   const TextExtractorScreen({super.key});
 
-  Future<void> _pickImage(BuildContext context, WidgetRef ref, ImageSource source) async {
-    final picker = ImagePicker();
+  @override
+  ConsumerState<TextExtractorScreen> createState() => _TextExtractorScreenState();
+}
+
+class _TextExtractorScreenState extends ConsumerState<TextExtractorScreen> {
+  PlatformFile? _selectedPdfFile;
+  String _extractedText = '';
+  bool _isExtracting = false;
+
+  Future<void> _pickAndExtractPdfText() async {
     try {
-      final XFile? image = await picker.pickImage(source: source);
-      if (image != null) {
-        ref.read(ocrExtractorProvider.notifier).setScannedImage(image);
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+        allowMultiple: false,
+        withData: true,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        final platformFile = result.files.first;
+        Uint8List? bytes = platformFile.bytes;
+
+        if (bytes == null && platformFile.path != null && !kIsWeb) {
+          bytes = await File(platformFile.path!).readAsBytes();
+        }
+
+        if (bytes != null && bytes.isNotEmpty) {
+          setState(() => _isExtracting = true);
+
+          final sync_pdf.PdfDocument doc = sync_pdf.PdfDocument(inputBytes: bytes);
+          final sync_pdf.PdfTextExtractor extractor = sync_pdf.PdfTextExtractor(doc);
+          final String text = extractor.extractText();
+          doc.dispose();
+
+          setState(() {
+            _selectedPdfFile = platformFile;
+            _extractedText = text.isEmpty ? 'No readable text layer found in this PDF document.' : text;
+            _isExtracting = false;
+          });
+        }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
+      if (mounted) {
+        setState(() => _isExtracting = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error extracting text: $e')),
+        );
+      }
     }
   }
 
-  void _showImageSourceModal(BuildContext context, WidgetRef ref) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library, color: Colors.blue),
-                title: const Text('Select from Gallery'),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _pickImage(context, ref, ImageSource.gallery);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera_alt, color: Colors.green),
-                title: const Text('Capture with Camera'),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _pickImage(context, ref, ImageSource.camera);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(ocrExtractorProvider);
+  Widget build(BuildContext context) {
+    final lang = ref.watch(languageProvider);
+    final tool = ToolCategories.getToolById('pdf_text_extractor');
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('OCR & Text Extractor'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.copy),
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: state.extractedText));
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Text copied to clipboard!')),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+      appBar: AppBar(title: Text(tool.getTitle(lang)), centerTitle: true),
+      body: ResponsiveContainer(
+        maxWidth: 800,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
           children: [
-            ElevatedButton.icon(
-              icon: const Icon(Icons.add_a_photo),
-              label: const Text('Scan Image from Gallery / Camera'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
+            pdfHero(tool.getTitle(lang), tool.getDescription(lang), Colors.red, Icons.text_snippet),
+            const SizedBox(height: 16),
+            Card(
+              child: ListTile(
+                leading: const Icon(Icons.picture_as_pdf, color: Colors.red, size: 36),
+                title: Text(
+                  _selectedPdfFile?.name ?? 'No PDF File Selected',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(
+                  _selectedPdfFile != null ? 'Size: ${(_selectedPdfFile!.size / 1024).toStringAsFixed(1)} KB' : 'Tap button to select PDF from Storage',
+                ),
+                trailing: ElevatedButton.icon(
+                  icon: const Icon(Icons.folder_open),
+                  label: const Text('Select PDF'),
+                  onPressed: _pickAndExtractPdfText,
+                ),
               ),
-              onPressed: () => _showImageSourceModal(context, ref),
             ),
             const SizedBox(height: 16),
-            if (state.scannedImage != null) ...[
-              Container(
-                height: 120,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.blue.shade300),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: kIsWeb
-                      ? Image.network(state.scannedImage!.path, fit: BoxFit.cover)
-                      : Image.file(File(state.scannedImage!.path), fit: BoxFit.cover),
+            if (_isExtracting)
+              const Center(child: CircularProgressIndicator())
+            else if (_extractedText.isNotEmpty)
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Extracted Document Text', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          IconButton(
+                            icon: const Icon(Icons.copy, color: Colors.blue),
+                            onPressed: () {
+                              Clipboard.setData(ClipboardData(text: _extractedText));
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Extracted text copied to clipboard!')));
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      SelectableText(_extractedText, style: const TextStyle(fontSize: 15, height: 1.5)),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 16),
-            ],
-            Expanded(
-              child: TextFormField(
-                initialValue: state.extractedText,
-                maxLines: null,
-                expands: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Extracted Text Result',
-                ),
-                onChanged: (val) => ref.read(ocrExtractorProvider.notifier).updateText(val),
-              ),
-            ),
           ],
         ),
       ),

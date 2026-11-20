@@ -7,19 +7,18 @@ import 'package:path_provider/path_provider.dart';
 import 'web_download_stub.dart' if (dart.library.html) 'web_download_helper.dart';
 
 class FileSaveService {
-  /// Save high-quality images directly to local storage / gallery folder
-  static Future<String?> saveImageToDevice(
+  /// Save raw byte image data (PNG / JPG) directly to device storage or browser download
+  static Future<String?> saveImageBytesToDevice(
     BuildContext context,
-    XFile imageFile,
+    Uint8List bytes,
     String prefix, {
-    String extension = 'jpg',
+    String extension = 'png',
   }) async {
     try {
-      if (kIsWeb) {
-        final bytes = await imageFile.readAsBytes();
-        final filename = '${prefix}_HQ_${DateTime.now().millisecondsSinceEpoch}.$extension';
-        downloadBytesInBrowser(bytes, filename);
+      final String fileName = '${prefix}_HQ_${DateTime.now().millisecondsSinceEpoch}.$extension';
 
+      if (kIsWeb) {
+        downloadBytesInBrowser(bytes, fileName);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -28,7 +27,7 @@ class FileSaveService {
             ),
           );
         }
-        return imageFile.path;
+        return 'web_download';
       }
 
       Directory? saveDir;
@@ -37,15 +36,14 @@ class FileSaveService {
       }
       saveDir ??= await getApplicationDocumentsDirectory();
 
-      final String fileName = '${prefix}_HQ_${DateTime.now().millisecondsSinceEpoch}.$extension';
       final String targetPath = '${saveDir.path}/$fileName';
-
-      final File newFile = await File(imageFile.path).copy(targetPath);
+      final File imageFile = File(targetPath);
+      await imageFile.writeAsBytes(bytes, flush: true);
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('High Quality $prefix saved successfully!\nPath: ${newFile.path}'),
+            content: Text('$prefix saved successfully as $extension!\nPath: ${imageFile.path}'),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 4),
             action: SnackBarAction(
@@ -56,7 +54,31 @@ class FileSaveService {
           ),
         );
       }
-      return newFile.path;
+      return imageFile.path;
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error saving $extension image: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return null;
+    }
+  }
+
+  /// Save high-quality images directly to local storage / gallery folder
+  static Future<String?> saveImageToDevice(
+    BuildContext context,
+    XFile imageFile,
+    String prefix, {
+    String extension = 'jpg',
+  }) async {
+    try {
+      final bytes = await imageFile.readAsBytes();
+      if (!context.mounted) return null;
+      return await saveImageBytesToDevice(context, bytes, prefix, extension: extension);
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

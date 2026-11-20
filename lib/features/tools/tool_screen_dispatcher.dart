@@ -283,8 +283,27 @@ class ToolScreenDispatcher {
         break;
 
       case 'pdf_page_rotator':
-      case 'pdf_page_reorder':
         screen = const PdfPageRotatorScreen();
+        break;
+
+      case 'pdf_page_reorder':
+        screen = const PdfPageReorderScreen();
+        break;
+
+      case 'pdf_page_delete':
+        screen = const PdfPageDeleteScreen();
+        break;
+
+      case 'pdf_page_number':
+        screen = const PdfPageNumberScreen();
+        break;
+
+      case 'pdf_invoice_maker':
+        screen = const PdfInvoiceMakerScreen();
+        break;
+
+      case 'pdf_certificate_maker':
+        screen = const PdfCertificateMakerScreen();
         break;
 
       case 'pdf_compressor':
@@ -312,9 +331,15 @@ class ToolScreenDispatcher {
         break;
 
       case 'id_card_scanner':
-      case 'doc_scanner':
-      case 'qr_to_pdf':
         screen = const IdCardScannerScreen();
+        break;
+
+      case 'doc_scanner':
+        screen = const DocScannerScreen();
+        break;
+
+      case 'qr_to_pdf':
+        screen = const QrToPdfScreen();
         break;
 
       case 'pdf_metadata_viewer':
@@ -322,8 +347,11 @@ class ToolScreenDispatcher {
         break;
 
       case 'pdf_page_counter':
+        screen = const PdfPageCounterScreen();
+        break;
+
       case 'pdf_to_image':
-        screen = const PdfMetadataScreen();
+        screen = const PdfToImageScreen();
         break;
 
       case 'pdf_reader':
@@ -473,7 +501,6 @@ class ToolScreenDispatcher {
       case 'http_headers':
       case 'whois_lookup':
       case 'subnet_calc':
-      case 'mac_formatter':
         screen = const IpViewerScreen();
         break;
 
